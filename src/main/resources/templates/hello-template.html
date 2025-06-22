@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+Hello
+<p th:text="'안녕하세요' +${name}">안녕하세요 empty</p>
+<!--템플릿 엔진으로 동작을 하면 안녕하세요 empty 이 값이
+text="'안녕하세요' +${name}"으로 치환됨-->
+</body>
+</html>
