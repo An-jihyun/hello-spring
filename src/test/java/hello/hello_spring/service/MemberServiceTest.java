@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MemberServiceTest {
@@ -38,7 +40,7 @@ class MemberServiceTest {
 
         //then
         Member findMember = memberService.findOne(saveId).get();
-        org.assertj.core.api.Assertions.assertThat(member.getName()).isEqualTo(findMember.getName());
+        assertThat(member.getName()).isEqualTo(findMember.getName());
         //alt+엔터가 static import 단축키인데 안먹힘. 해결방법 찾을것.
     }
 
@@ -54,7 +56,7 @@ class MemberServiceTest {
         //when
         memberService.join(member1);
         IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));
-        org.assertj.core.api.Assertions.assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+        assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
 
 //        try {
 //            memberService.join(member2);
@@ -68,9 +70,34 @@ class MemberServiceTest {
 
     @Test
     void findMembers() {
+        // given
+        Member member1 = new Member();
+        member1.setName("spring1");
+        memberService.join(member1);
+
+        Member member2 = new Member();
+        member2.setName("spring2");
+        memberService.join(member2);
+
+        // when
+        List<Member> members = memberService.findMembers();
+
+        // then
+        assertThat(members.size()).isEqualTo(2);
     }
 
     @Test
     void findOne() {
+        // given
+        Member member = new Member();
+        member.setName("spring");
+        Long savedId = memberService.join(member);
+
+        // when
+        Optional<Member> result = memberService.findOne(savedId);
+
+        // then
+        assertThat(result.isPresent()).isTrue();
+        assertThat(result.get().getName()).isEqualTo("spring");
     }
 }
